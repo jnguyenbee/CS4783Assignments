@@ -14,7 +14,7 @@ let propertiesdb = []
 // returns all properties from the DB
 propertiesdb.all = () => {
     return new Promise((resolve, reject) => {
-        pool.query('SELECT id, address, zip FROM properties order by id', (err, results) => {
+        pool.query('SELECT id, address, zip FROM properties order by id asc', (err, results) => {
             if(err) {
                 return reject(err);
             }
