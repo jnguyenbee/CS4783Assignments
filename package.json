@@ -1,0 +1,22 @@
+{
+  "name": "assignment1",
+  "version": "1.0.0",
+  "description": "Assignment 1",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jnguyenbee/CS4783Assignment1.git"
+  },
+  "author": "zki62 and zfv431",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/jnguyenbee/CS4783Assignment1/issues"
+  },
+  "homepage": "https://github.com/jnguyenbee/CS4783Assignment1#readme",
+  "dependencies": {
+    "express": "^4.17.1"
+  }
+}
