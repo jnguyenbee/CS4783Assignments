@@ -1,7 +1,16 @@
 const express = require('express')
 const app = express()
-const port = 3000
+const PORT = process.env.PORT || 3000
 
-app.get('/hello', (req, res) => res.send('Hello World!'))
+app.get('/hello', function (req, res) {
+    var jsqon = [{"message": "hello yourself"}];
+    res.status(200).end(JSON.stringify(json));
+});
 
-app.listen(port, () => console.log(`Example app listening on port ${port}!`))
+app.get('/properties', function (req, res) {
+	var json = [{"message": "properties!"}];
+    res.status(200).end(JSON.stringify(json));
+});
+
+// npm run server
+app.listen(PORT, () => console.log(`Server started on port ${PORT}!`))
