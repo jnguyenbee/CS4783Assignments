@@ -9,6 +9,7 @@ router.get('/', async (req, res, next) => {
     try {
         let results = await db.all();
         res.json(results);
+        res.status(200).end
     } catch(e) {
         console.log(e);
         res.sendStatus(500);
