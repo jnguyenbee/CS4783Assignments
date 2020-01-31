@@ -29,8 +29,8 @@ Pressing ctrl + S will save and restart the server if the script is already runn
 
 ## Calling requests
 Open up Postman and call the requests
-GET    - localhost:3000/hello
-GET    - localhost:3000/properties
-POST   - localhost:3000/properties/
-GET    - localhost:3000/properties/<id>
-DELETE - localhost:3000/properties/<id>
+- GET    - localhost:3000/hello
+- GET    - localhost:3000/properties
+- POST   - localhost:3000/properties/
+- GET    - localhost:3000/properties/`<id>`
+- DELETE - localhost:3000/properties/`<id>`
