@@ -1,1 +1,1 @@
-# CS4783Assignement1
+# CS4783Assignment1
