@@ -10,6 +10,17 @@ Open up bash or powershell on root directory and run this command:
 npm install express dotenv mysql nodemon
 ```
 
+## Create environment variables
+Create a file called .env in root and fill in the following variables without quotations
+```
+PORT=
+DATABASE_USERNAME=
+DATABASE_PASSWORD=
+DATABASE_HOST=
+DATABASE_PORT=
+DATABASE_NAME=
+```
+
 ## Running server
 ```
 npm run server
