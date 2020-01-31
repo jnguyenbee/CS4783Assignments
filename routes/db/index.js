@@ -1,6 +1,7 @@
 const mysql = require('mysql');
 
-const pool = mysql.createPool({
+// database login information
+const pool = mysql.createConnection({
     connectionLimit: 10,
     password: process.env.DATABASE_PASSWORD,
     user: process.env.DATABASE_USERNAME,
@@ -9,18 +10,18 @@ const pool = mysql.createPool({
     database: process.env.DATABASE_NAME
 });
 
-let propertiesdb = []
+// connect to database
+pool.connect((err) => {
+    try {
+        if(!err) {
+            console.log("Connected to database")
+        } else {
+            throw new Error()
+        }
+    } catch(e) {
+        console.log(e)
+        console.log("Connection to database failed")
+    }
+});
 
-// returns all properties from the DB
-propertiesdb.all = () => {
-    return new Promise((resolve, reject) => {
-        pool.query('SELECT id, address, zip FROM properties order by id asc', (err, results) => {
-            if(err) {
-                return reject(err);
-            }
-            return resolve(results);
-        });
-    });
-};
-
-module.exports = propertiesdb
+module.exports = pool
