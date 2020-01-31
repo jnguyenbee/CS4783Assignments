@@ -3,6 +3,7 @@ const db = require('./db');
 const bodyParser = require('body-parser')
 const router = express.Router();
 
+// body parsing set up
 router.use(bodyParser.json())
 router.use(bodyParser.urlencoded({ extended: true }))
 
@@ -13,6 +14,8 @@ router.get('/', (req, res) => {
     db.query('SELECT id, address, zip FROM properties ORDER BY id ASC', (err, rows, fields) => {
         try {
             if(err) throw err;
+            
+            // get rows and return 200 status
             res.send(rows);
             res.status(200).end
         } catch(e) {
@@ -27,6 +30,7 @@ router.get('/', (req, res) => {
 // @access  Public
 router.post('/', function(req, res) {
     try {
+        // message object
         var json = [];
 
         // check for validation
@@ -74,6 +78,31 @@ router.post('/', function(req, res) {
         res.sendStatus(500);
     }
    res.send()
+});
+
+// @route   GET /properties/:id
+// @desc    properties route
+// @access  Public
+router.get('/:id', (req, res) => {
+    console.log('Request Id:', req.params.id);
+    
+    db.query(`SELECT id, address, zip FROM properties WHERE ID = ${req.params.id}`, (err, rows, fields) => {
+        try {
+            if(err) throw err;
+            
+            // if no matches, send a 404 status
+            if(rows.length == 0) {
+                res.status(404).end
+            }
+
+            // get data and return 200 status
+            res.send(rows);
+            res.status(200).end
+        } catch(e) {
+            console.log(e);
+            res.sendStatus(500);
+        }
+    });
 });
 
 module.exports = router;
