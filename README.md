@@ -25,7 +25,7 @@ DATABASE_NAME=
 ```
 npm run server
 ```
-Pressing ctrl + S will save and restart the server if the script is already running
+Pressing Ctrl + S will save and restart the server if the script is already running
 
 ## Calling requests
 Open up Postman and call the requests
