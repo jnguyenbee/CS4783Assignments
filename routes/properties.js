@@ -84,8 +84,6 @@ router.post('/', function(req, res) {
 // @desc    properties route
 // @access  Public
 router.get('/:id', (req, res) => {
-    console.log('Request Id:', req.params.id);
-    
     db.query(`SELECT id, address, zip FROM properties WHERE ID = ${req.params.id}`, (err, rows, fields) => {
         try {
             if(err) throw err;
@@ -98,6 +96,25 @@ router.get('/:id', (req, res) => {
             // get data and return 200 status
             res.send(rows);
             res.status(200).end
+        } catch(e) {
+            console.log(e);
+            res.sendStatus(500);
+        }
+    });
+});
+
+// @route   DELETE /properties/:id
+// @desc    properties route
+// @access  Public
+router.delete('/:id', (req, res) => {
+    // delete id
+    db.query(`DELETE FROM properties WHERE ID = ${req.params.id}`, (err, rows, fields) => {
+        try {
+            if(err) throw err;
+
+            // return 200 status if deletion is successful
+            var json = [{"message": "deleted"}];
+            res.status(200).end(JSON.stringify(json));
         } catch(e) {
             console.log(e);
             res.sendStatus(500);
