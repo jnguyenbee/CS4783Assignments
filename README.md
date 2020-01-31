@@ -5,13 +5,13 @@ Install NodeJS and extract these files into a folder
 [express](https://www.npmjs.com/package/express), [dotenv](https://www.npmjs.com/package/dotenv), [mysql](https://www.npmjs.com/package/mysql), [nodemon](https://www.npmjs.com/package/nodemon), [body-parser](https://www.npmjs.com/package/body-parser)
 
 ## Installing packages
-Open up bash or powershell on root directory and run this command:
+Open up your terminal in the root directory and run this command:
 ```
-npm install express dotenv mysql nodemon body-parser
+npm install
 ```
 
 ## Create environment variables
-Create a file called .env in root and fill in the following variables without quotations
+Create a file called .env in the root directory and fill in the following variables without quotations
 ```
 PORT=
 DATABASE_USERNAME=
@@ -26,3 +26,11 @@ DATABASE_NAME=
 npm run server
 ```
 Pressing ctrl + S will save and restart the server if the script is already running
+
+## Calling requests
+Open up Postman and call the requests
+GET    - localhost:3000/hello
+GET    - localhost:3000/properties
+POST   - localhost:3000/properties/
+GET    - localhost:3000/properties/<id>
+DELETE - localhost:3000/properties/<id>
