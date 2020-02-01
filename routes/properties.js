@@ -111,7 +111,12 @@ router.delete('/:id', (req, res) => {
     db.query(`DELETE FROM properties WHERE ID = ${req.params.id}`, (err, rows, fields) => {
         try {
             if(err) throw err;
-
+            
+            // if no rows affected, return 404 status
+            if(rows.affectedRows == 0) {
+                res.sendStatus(404).end;
+            }
+            
             // return 200 status if deletion is successful
             var json = [{"message": "deleted"}];
             res.status(200).end(JSON.stringify(json));
