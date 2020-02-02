@@ -60,7 +60,7 @@ router.post('/', function(req, res) {
         }
 
         // run insert query if valid POST request
-        db.query(`INSERT INTO properties (address, city, state, zip) VALUES ('${req.body.address}', '${req.body.city}', '${req.body.state}', '${req.body.zip}')`, (err, rows, fields) => {
+        db.query(`INSERT INTO properties (address, city, state, zip) VALUES (?, ?, ?, ?)`, [req.body.address, req.body.city, req.body.state, req.body.zip], (err, rows, fields) => {
             try {
                 // if there is an error, throw it
                 if(err) throw err;
@@ -84,7 +84,7 @@ router.post('/', function(req, res) {
 // @desc    properties route
 // @access  Public
 router.get('/:id', (req, res) => {
-    db.query(`SELECT id, address, zip FROM properties WHERE ID = ${req.params.id}`, (err, rows, fields) => {
+    db.query(`SELECT id, address, zip FROM properties WHERE ID = ?`, [req.params.id], (err, rows, fields) => {
         try {
             if(err) throw err;
             
@@ -108,7 +108,7 @@ router.get('/:id', (req, res) => {
 // @access  Public
 router.delete('/:id', (req, res) => {
     // delete id
-    db.query(`DELETE FROM properties WHERE ID = ${req.params.id}`, (err, rows, fields) => {
+    db.query(`DELETE FROM properties WHERE ID = ?`, [req.params.id], (err, rows, fields) => {
         try {
             if(err) throw err;
             
