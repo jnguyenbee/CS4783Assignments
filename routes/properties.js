@@ -34,22 +34,22 @@ router.post('/', function(req, res) {
         var json = [];
 
         // check for validation
-        if (1 > req.body.address.length || 200 < req.body.address.length) {
+        if (!req.body.hasOwnProperty("address") || 1 > req.body.address.length || 200 < req.body.address.length) {
             json.push({ "message": "address is not between 1 and 200 characters" });
             res.status(400);
         }
 
-        if (1 > req.body.city.length || 50 < req.body.city.length) {
+        if (!req.body.hasOwnProperty("city") || 1 > req.body.city.length || 50 < req.body.city.length) {
             json.push({ "message": "city is not between 1 and 50 characters" });
             res.status(400);
         }
 
-        if (2 != req.body.state.length) {
+        if (!req.body.hasOwnProperty("state") || 2 != req.body.state.length) {
             json.push({ "message": "state is not 2 characters" });
             res.status(400);
         }
 
-        if (5 > req.body.zip.length || 10 < req.body.zip.length) {
+        if (!req.body.hasOwnProperty("zip") || 5 > req.body.zip.length || 10 < req.body.zip.length) {
             json.push({ "message": "zip is not between 5 and 10 characters" });
             res.status(400);
         }
