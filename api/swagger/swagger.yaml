@@ -5,10 +5,26 @@ info:
   description: blah
 host: localhost:3000
 basePath: /
+tags:
+  - name: Hello
+    description: Hello
+  - name: Property
+    description: Property
+
 paths:
+  /hello:
+    get:
+      description: OK
+      tags:
+        - Hello
+      responses:
+        "200":
+          description: OK
   /properties:
     post:
       summary: Creates a new Property
+      tags:
+        - Property
       consumes:
         - application/json
       parameters:
@@ -16,13 +32,27 @@ paths:
           name: property
           description: trying hard to make this work
           schema:
-            $ref: "../swagger/components.yaml#/components/schemas/Property"
+            $ref: "../swagger/definitions.yaml#/definitions/Property"
             example:
-              id: 1
               address: 123 Test Ave
               city: San Antonio
               state: TX
               zip: 78222
       responses:
         "200":
-          description: Successfule Created a Property
+          description: Successfully Created a Property
+
+  /properties/{propertyId}:
+    get:
+      summary: Get a Property by propertyId
+      tags:
+        - Property
+      parameters:
+        - in: path
+          name: propertyId
+          type: integer
+          required: true
+          description: Numberic ID of the property to get
+      responses:
+        "200":
+          description: OK
