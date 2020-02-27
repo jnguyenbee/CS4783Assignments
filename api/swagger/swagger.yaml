@@ -1,0 +1,30 @@
+info:
+  version: '1.0.0'
+  title: API
+  description: blah
+host: localhost:3000
+basePath: /
+schemes:
+  description:
+consumes: -application/json
+produce: -application/json
+paths:
+  /hello:
+    get:
+      summary: return a string 'hello yourself'
+      description: get a message
+      responses:
+        '200':
+          description:
+  /properties:
+    get:
+      summary:
+      responses:
+  /properties{id}:
+    get:
+      summary: Returns a /properties by Id.
+      parameters:
+        -name: id
+        required: true
+        description:
+        schema:
