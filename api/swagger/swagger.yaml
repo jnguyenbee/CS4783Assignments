@@ -36,9 +36,9 @@ paths:
           in: path
           required: true
           description: Parameter description in CommonMark or HTML.
-          type : integer
+          type: integer
           format: int64
           minimum: 1
-      responses: 
-        '200':
+      responses:
+        "200":
           description: Sucess
