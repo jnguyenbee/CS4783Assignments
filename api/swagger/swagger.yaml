@@ -14,7 +14,7 @@ tags:
 paths:
   /hello:
     get:
-      description:
+      description: OK
       tags:
         - Hello
       responses:
