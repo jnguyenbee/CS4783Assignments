@@ -1,0 +1,44 @@
+swagger: "2.0"
+info:
+  version: "1.0.0"
+  title: API
+  description: blah
+host: localhost:3000
+basePath: /
+produces:
+  - application/json
+paths:
+  /hello:
+    get:
+      summary: return a string
+      description: get a message
+      operationId: GetHelloOpertions
+      responses:
+        "200":
+          description: Sucess
+          schema:
+            type: string
+  /properties:
+    get:
+      summary: return a string
+      description: get a message
+      operationId: GetPropOperations
+      responses:
+        "200":
+          description: Sucess
+          schema:
+            type: string
+  /properties/{propertyID}:
+    get:
+      summary: Returns a property by an ID.
+      parameters:
+        - name: propertyID
+          in: path
+          required: true
+          description: Parameter description in CommonMark or HTML.
+          type : integer
+          format: int64
+          minimum: 1
+      responses: 
+        '200':
+          description: Sucess
