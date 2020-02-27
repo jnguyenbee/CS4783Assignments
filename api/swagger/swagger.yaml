@@ -5,40 +5,24 @@ info:
   description: blah
 host: localhost:3000
 basePath: /
-produces:
-  - application/json
 paths:
-  /hello:
-    get:
-      summary: return a string
-      description: get a message
-      operationId: GetHelloOpertions
-      responses:
-        "200":
-          description: Sucess
-          schema:
-            type: string
   /properties:
-    get:
-      summary: return a string
-      description: get a message
-      operationId: GetPropOperations
-      responses:
-        "200":
-          description: Sucess
-          schema:
-            type: string
-  /properties/{propertyID}:
-    get:
-      summary: Returns a property by an ID.
+    post:
+      summary: Creates a new Property
+      consumes:
+        - application/json
       parameters:
-        - name: propertyID
-          in: path
-          required: true
-          description: Parameter description in CommonMark or HTML.
-          type: integer
-          format: int64
-          minimum: 1
+        - in: body
+          name: property
+          description: trying hard to make this work
+          schema:
+            $ref: "../swagger/components.yaml#/components/schemas/Property"
+            example:
+              id: 1
+              address: 123 Test Ave
+              city: San Antonio
+              state: TX
+              zip: 78222
       responses:
         "200":
-          description: Sucess
+          description: Successfule Created a Property

@@ -1,0 +1,24 @@
+definitions:
+  Property:
+    type: object
+    required:
+      - address
+      - city
+      - state
+      - zip
+    properties:
+      id:
+        type: integer
+        format: int64
+      address:
+        type: string
+        description: The address of the Property
+      city:
+        type: string
+        description: The city of the Property
+      state:
+        type: string
+        description: The state of the Property
+      zip:
+        type: string
+        description: The zip code of the Property
