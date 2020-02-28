@@ -1,10 +1,12 @@
 swagger: "2.0"
 info:
   version: "1.0.0"
-  title: API
-  description: blah
+  title: CS4783Assignment
+  description: Jason Kha, and Jennifer Nguyen
 host: localhost:3000
 basePath: /
+schemes:
+  - https
 tags:
   - name: Hello
     description: Hello
@@ -20,6 +22,9 @@ paths:
       responses:
         "200":
           description: OK
+          schema:
+            $ref: "../swagger/definitions.yaml#/definitions/msg"
+
   /properties:
     post:
       summary: Creates a new Property
@@ -32,10 +37,23 @@ paths:
           name: property
           description: trying hard to make this work
           schema:
-            $ref: "../swagger/definitions.yaml#/definitions/Property"
+            $ref: "../swagger/definitions.yaml#/definitions/POSTProperty"
       responses:
         "200":
           description: Successfully Created a Property
+
+    get:
+      summary: Retrieve a list of all Property
+      description: A list of Property
+      tags:
+        - Property
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: array
+            items:
+              $ref: "../swagger/definitions.yaml#/definitions/GETProperty"
 
   /properties/{propertyId}:
     get:
@@ -52,4 +70,5 @@ paths:
         "200":
           description: Successfully Retrived a Property
           schema:
-            $ref: "../swagger/definitions.yaml#/definitions/Property"
+            type: object
+            $ref: "../swagger/definitions.yaml#/definitions/GETProperty"
