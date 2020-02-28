@@ -1,11 +1,6 @@
 definitions:
   Property:
     type: object
-    required:
-      - address
-      - city
-      - state
-      - zip
     properties:
       id:
         type: integer

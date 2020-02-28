@@ -33,11 +33,6 @@ paths:
           description: trying hard to make this work
           schema:
             $ref: "../swagger/definitions.yaml#/definitions/Property"
-            example:
-              address: 123 Test Ave
-              city: San Antonio
-              state: TX
-              zip: 78222
       responses:
         "200":
           description: Successfully Created a Property
@@ -55,4 +50,6 @@ paths:
           description: Numberic ID of the property to get
       responses:
         "200":
-          description: OK
+          description: Successfully Retrived a Property
+          schema:
+            $ref: "../swagger/definitions.yaml#/definitions/Property"
