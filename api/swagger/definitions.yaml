@@ -1,15 +1,13 @@
 definitions:
-  Property:
+  msg:
     type: object
-    required:
-      - address
-      - city
-      - state
-      - zip
     properties:
-      id:
-        type: integer
-        format: int64
+      message:
+        type: string
+
+  POSTProperty:
+    type: object
+    properties:
       address:
         type: string
         description: The address of the Property
@@ -19,6 +17,19 @@ definitions:
       state:
         type: string
         description: The state of the Property
+      zip:
+        type: string
+        description: The zip code of the Property
+
+  GETProperty:
+    type: object
+    properties:
+      id:
+        type: integer
+        format: int64
+      address:
+        type: string
+        description: The address of the Property
       zip:
         type: string
         description: The zip code of the Property
