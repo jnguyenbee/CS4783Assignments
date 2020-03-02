@@ -1,6 +1,6 @@
-swagger: "2.0"
+swagger: '2.0'
 info:
-  version: "1.0.0"
+  version: '1.0.0'
   title: CS4783Assignment
   description: Jason Kha, and Jennifer Nguyen
 host: localhost:3000
@@ -20,44 +20,71 @@ paths:
       tags:
         - Hello
       responses:
-        "200":
+        '200':
           description: OK
           schema:
-            $ref: "../swagger/definitions.yaml#/definitions/msg"
+            $ref: '../swagger/definitions.yaml#/definitions/msg'
 
   /properties:
     post:
-      summary: Creates a new Property
+      summary: Add a Property
       tags:
         - Property
+      operationId: postProperty
       consumes:
+        - application/json
+      produces:
         - application/json
       parameters:
         - in: body
           name: property
-          description: trying hard to make this work
+          description: The property to create
           schema:
-            $ref: "../swagger/definitions.yaml#/definitions/POSTProperty"
+            $ref: '../swagger/definitions.yaml#/definitions/POSTProperty'
       responses:
-        "200":
+        '200':
           description: Successfully Created a Property
+          schema:
+            type: object
+            items:
+              $ref: '../swagger/definitions.yaml#/definitions/msg'
+            example:
+              - message: added
+        '400':
+          description: Error
+          schema:
+            type: array
+            items:
+              $ref: '../swagger/definitions.yaml#/definitions/msg'
+            example:
+              - message: address is not between 1 and 200 characters
+              - message: state is not 2 characters
+              - message: city is not between 1 and 50 characters
+              - message: zip is not between 5 and 10 characters
 
     get:
-      summary: Retrieve a list of all Property
-      description: A list of Property
+      summary: Return a list properties
+      description: Returns a list of Stored US properties (id,address, and zip) order by id
       tags:
         - Property
       responses:
-        "200":
+        '200':
           description: OK
           schema:
             type: array
             items:
-              $ref: "../swagger/definitions.yaml#/definitions/GETProperty"
-
+              $ref: '../swagger/definitions.yaml#/definitions/GETProperty'
+            example:
+              - id: 1
+                address: 123 Test Ave
+                zip: 78222
+              - id: 2
+                address: 123 Main Street
+                zip: 78222
   /properties/{propertyId}:
     get:
-      summary: Get a Property by propertyId
+      summary: Find a Property
+      description: return a JSON
       tags:
         - Property
       parameters:
@@ -67,8 +94,23 @@ paths:
           required: true
           description: Numberic ID of the property to get
       responses:
-        "200":
+        '200':
           description: Successfully Retrived a Property
           schema:
-            type: object
-            $ref: "../swagger/definitions.yaml#/definitions/GETProperty"
+            $ref: '../swagger/definitions.yaml#/definitions/property'
+            example:
+              id: 1
+              address: 123 Test Ave
+              city: San Antonio
+              state: TX
+              zip: 78222
+        '404':
+          description: Property not found
+
+    delete:
+      description: Delete the property with an id value {id}
+      tags:
+        - Property
+      responses:
+        '200':
+          description: OK
