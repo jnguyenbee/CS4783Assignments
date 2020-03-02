@@ -5,8 +5,25 @@ definitions:
       message:
         type: string
 
+  property:
+    allOf:
+      - $ref: '#/definitions/GETProperty'
+    type: object
+    properties:
+      state:
+        type: string
+        description: The state of the Property
+      city:
+        type: string
+        description: The city of the Property
+
   POSTProperty:
     type: object
+    required:
+      - address
+      - city
+      - state
+      - zip
     properties:
       address:
         type: string
