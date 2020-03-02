@@ -4,17 +4,18 @@ const swaggerJsDoc = require('swagger-jsdoc');
 const swaggerOptions = {
     swaggerDefinition: {
         info: {
-            title: 'Test API',
+            title: 'CS4783Assignment',
             version: '1.0.0',
-            description: 'Test Express API with blah'
+            description: 'Jason Kha, and Jennifer Nguyen'
         },
-        host: 'https://localhost:3000',
+        //host: 'https://localhost:3000',
         bathPath: '/'
+            //   schemes: https
     },
     apis: ['routes/*.js']
 };
 
 const swaggerDocs = swaggerJsDoc(swaggerOptions);
 module.exports = app => {
-    app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocs));
+    app.use('/', swaggerUi.serve, swaggerUi.setup(swaggerDocs));
 };
