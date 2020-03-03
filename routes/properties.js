@@ -127,9 +127,10 @@ router.get('/', (req, res) => {
  *          description: Successfully Created a Property
  *          schema:
  *              type: object
- *              $ref: '#/definitions/msg'
+ *              items:
+ *                  $ref: '#/definitions/msg'
  *              example:
- *                 - message: added
+ *                  message: added
  *       400:
  *          description: Error
  *          schema:
@@ -146,6 +147,12 @@ router.post('/', function(req, res) {
     try {
         // message object
         var json = [];
+
+        // check for auth
+        var key = req.headers['x-api-key'];
+        if (key != 'cs4783FTW') {
+            res.sendStatus(401).end;
+        }
 
         // check for validation
         if (!req.body.hasOwnProperty('address') ||
@@ -231,12 +238,6 @@ router.post('/', function(req, res) {
  *          schema:
  *           type: object
  *           $ref: '#/definitions/property'
- *           example:
- *             id: 1
- *             address: 123 Test Ave
- *             city: San Antonio
- *             state: TX
- *             zip: 78222
  *       404:
  *          description: Property not found
  */
@@ -247,8 +248,13 @@ router.get('/:id', (req, res) => {
             try {
                 if (err) throw err;
 
+                // check id is int
+                if (isNaN(parseInt(req.params.id, 10))) {
+                    res.status(400).end;
+                }
+
                 // if no matches, send a 404 status
-                if (rows.length == 0) {
+                else if (rows.length == 0) {
                     res.status(404).end;
                 }
 
@@ -269,26 +275,37 @@ router.get('/:id', (req, res) => {
 
 router.delete('/:id', (req, res) => {
     // delete id
-    db.query(
-        `DELETE FROM properties WHERE ID = ?`, [req.params.id],
-        (err, rows, fields) => {
-            try {
-                if (err) throw err;
 
-                // if no rows affected, return 404 status
-                if (rows.affectedRows == 0) {
-                    res.sendStatus(404).end;
+    // check for auth
+    var key = req.headers['x-api-key'];
+    if (key != 'cs4783FTW') {
+        res.sendStatus(401).end();
+    } else {
+        db.query(
+            `DELETE FROM properties WHERE ID = ?`, [req.params.id],
+            (err, rows, fields) => {
+                try {
+                    if (err) throw err;
+
+                    // check id is int
+                    if (isNaN(parseInt(req.params.id, 10))) {
+                        res.sendStatus(400).end;
+                    }
+                    // if no rows affected, return 404 status
+                    else if (rows.affectedRows == 0) {
+                        res.sendStatus(404).end;
+                    }
+
+                    // return 200 status if deletion is successful
+                    var json = [{ message: 'deleted' }];
+                    res.status(200).end(JSON.stringify(json));
+                } catch (e) {
+                    console.log(e);
+                    res.sendStatus(500);
                 }
-
-                // return 200 status if deletion is successful
-                var json = [{ message: 'deleted' }];
-                res.status(200).end(JSON.stringify(json));
-            } catch (e) {
-                console.log(e);
-                res.sendStatus(500);
             }
-        }
-    );
+        );
+    }
 });
 
 router.put('/:id', (req, res) => {
@@ -296,6 +313,17 @@ router.put('/:id', (req, res) => {
     try {
         // message object
         var json = [];
+
+        // check for auth
+        var key = req.headers['x-api-key'];
+        if (key != 'cs4783FTW') {
+            res.sendStatus(401).end;
+        }
+
+        // TODO:
+        if (isNaN(parseInt(req.params.id, 10))) {
+            res.sendStatus(400).end;
+        }
 
         // check for validation
         if (
@@ -359,7 +387,6 @@ router.put('/:id', (req, res) => {
                 }
             }
         );
-
         // request is good
         json.push({ message: 'updated' });
         return res.status(200).end(JSON.stringify(json));

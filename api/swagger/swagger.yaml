@@ -1,6 +1,6 @@
-swagger: '2.0'
+swagger: "2.0"
 info:
-  version: '1.0.0'
+  version: "1.0.0"
   title: CS4783Assignment
   description: Jason Kha, and Jennifer Nguyen
 host: localhost:3000
@@ -20,10 +20,10 @@ paths:
       tags:
         - Hello
       responses:
-        '200':
+        "200":
           description: OK
           schema:
-            $ref: '../swagger/definitions.yaml#/definitions/msg'
+            $ref: "../swagger/definitions.yaml#/definitions/msg"
 
   /properties:
     post:
@@ -40,22 +40,22 @@ paths:
           name: property
           description: The property to create
           schema:
-            $ref: '../swagger/definitions.yaml#/definitions/POSTProperty'
+            $ref: "../swagger/definitions.yaml#/definitions/POSTProperty"
       responses:
-        '200':
+        "200":
           description: Successfully Created a Property
           schema:
             type: object
             items:
-              $ref: '../swagger/definitions.yaml#/definitions/msg'
+              $ref: "../swagger/definitions.yaml#/definitions/msg"
             example:
-              - message: added
-        '400':
+              message: added
+        "400":
           description: Error
           schema:
             type: array
             items:
-              $ref: '../swagger/definitions.yaml#/definitions/msg'
+              $ref: "../swagger/definitions.yaml#/definitions/msg"
             example:
               - message: address is not between 1 and 200 characters
               - message: state is not 2 characters
@@ -68,12 +68,12 @@ paths:
       tags:
         - Property
       responses:
-        '200':
+        "200":
           description: OK
           schema:
             type: array
             items:
-              $ref: '../swagger/definitions.yaml#/definitions/GETProperty'
+              $ref: "../swagger/definitions.yaml#/definitions/GETProperty"
             example:
               - id: 1
                 address: 123 Test Ave
@@ -94,17 +94,17 @@ paths:
           required: true
           description: Numberic ID of the property to get
       responses:
-        '200':
+        "200":
           description: Successfully Retrived a Property
           schema:
-            $ref: '../swagger/definitions.yaml#/definitions/property'
+            $ref: "../swagger/definitions.yaml#/definitions/property"
             example:
               id: 1
               address: 123 Test Ave
               city: San Antonio
               state: TX
               zip: 78222
-        '404':
+        "404":
           description: Property not found
 
     delete:
@@ -112,5 +112,5 @@ paths:
       tags:
         - Property
       responses:
-        '200':
+        "200":
           description: OK
