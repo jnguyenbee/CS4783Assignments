@@ -168,49 +168,50 @@ router.get('/', (req, res) => {
  */
 router.post('/', function(req, res) {
     try {
-        // message object
-        var json = [];
-
-        // check for validation
-        if (!req.body.hasOwnProperty('address') ||
-            1 > req.body.address.length ||
-            200 < req.body.address.length
-        ) {
-            json.push({ message: 'address is not between 1 and 200 characters' });
-            res.status(400);
-        }
-
-        if (!req.body.hasOwnProperty('city') ||
-            1 > req.body.city.length ||
-            50 < req.body.city.length
-        ) {
-            json.push({ message: 'city is not between 1 and 50 characters' });
-            res.status(400);
-        }
-
-        if (!req.body.hasOwnProperty('state') || 2 != req.body.state.length) {
-            json.push({ message: 'state is not 2 characters' });
-            res.status(400);
-        }
-
-        if (!req.body.hasOwnProperty('zip') ||
-            5 > req.body.zip.length ||
-            10 < req.body.zip.length
-        ) {
-            json.push({ message: 'zip is not between 5 and 10 characters' });
-            res.status(400);
-        }
-
-        // check status code
-        if (res.statusCode == 400) {
-            return res.end(JSON.stringify(json));
-        }
-
         // check for auth
         var key = req.headers['x-api-key'];
         if (key != 'cs4783FTW') {
             res.sendStatus(401).end;
         } else {
+            // message object
+
+            var json = [];
+
+            // check for validation
+            if (!req.body.hasOwnProperty('address') ||
+                1 > req.body.address.length ||
+                200 < req.body.address.length
+            ) {
+                json.push({ message: 'address is not between 1 and 200 characters' });
+                res.status(400);
+            }
+
+            if (!req.body.hasOwnProperty('city') ||
+                1 > req.body.city.length ||
+                50 < req.body.city.length
+            ) {
+                json.push({ message: 'city is not between 1 and 50 characters' });
+                res.status(400);
+            }
+
+            if (!req.body.hasOwnProperty('state') || 2 != req.body.state.length) {
+                json.push({ message: 'state is not 2 characters' });
+                res.status(400);
+            }
+
+            if (!req.body.hasOwnProperty('zip') ||
+                5 > req.body.zip.length ||
+                10 < req.body.zip.length
+            ) {
+                json.push({ message: 'zip is not between 5 and 10 characters' });
+                res.status(400);
+            }
+
+            // check status code
+            if (res.statusCode == 400) {
+                return res.end(JSON.stringify(json));
+            }
+
             // run insert query if valid POST request
             db.query(
                 `INSERT INTO properties (address, city, state, zip) VALUES (?, ?, ?, ?)`, [req.body.address, req.body.city, req.body.state, req.body.zip],
@@ -261,35 +262,41 @@ router.post('/', function(req, res) {
  *          schema:
  *           type: object
  *           $ref: '#/definitions/property'
+ *       400:
+ *          description: id is not an int
+ *          schema:
+ *           type: string
+ *           example:
+ *             Bad Request
  *       404:
  *          description: Property not found
  */
 router.get('/:id', (req, res) => {
-    db.query(
-        `SELECT id, address, city, state, zip FROM properties WHERE ID = ?`, [req.params.id],
-        (err, rows, fields) => {
-            try {
-                if (err) throw err;
-
-                // check id is int
-                if (isNaN(parseInt(req.params.id, 10))) {
-                    res.status(400).end;
+    if (isNaN(parseInt(req.params.id, 10))) {
+        // check id is an int
+        res.sendStatus(400).end;
+    } else {
+        db.query(
+            `SELECT id, address, city, state, zip FROM properties WHERE ID = ?`, [req.params.id],
+            (err, rows, fields) => {
+                try {
+                    if (err) throw err;
+                    // check id is int
+                    // if no matches, send a 404 status
+                    else if (rows.length == 0) {
+                        res.sendStatus(404).end;
+                    } else {
+                        // get data and return 200 status
+                        res.send(rows);
+                        res.status(200).end;
+                    }
+                } catch (e) {
+                    console.log(e);
+                    res.sendStatus(500);
                 }
-
-                // if no matches, send a 404 status
-                else if (rows.length == 0) {
-                    res.status(404).end;
-                }
-
-                // get data and return 200 status
-                res.send(rows);
-                res.status(200).end;
-            } catch (e) {
-                console.log(e);
-                res.sendStatus(500);
             }
-        }
-    );
+        );
+    }
 });
 
 // @route   DELETE /properties/:id
@@ -324,27 +331,36 @@ router.get('/:id', (req, res) => {
  *              $ref: '#/definitions/msg'
  *           example:
  *              message: deleted
- *       404:
- *          description: Property not found
+ *       400:
+ *          description: id is not an int
  *          schema:
  *           type: string
  *           example:
- *             Not Found
+ *             Bad Request
  *       401:
  *          description: Authoriation Error, Missing api-key
  *          schema:
  *           type: string
  *           example:
  *             Unauthorized
+ *       404:
+ *          description: Property not found
+ *          schema:
+ *           type: string
+ *           example:
+ *             Not Found
  *
  */
 router.delete('/:id', (req, res) => {
     // delete id
 
-    // check for auth
     var key = req.headers['x-api-key'];
     if (key != 'cs4783FTW') {
+        // check for auth
         res.sendStatus(401).end();
+    } else if (isNaN(parseInt(req.params.id, 10))) {
+        // check id is an int
+        res.sendStatus(400).end;
     } else {
         db.query(
             `DELETE FROM properties WHERE ID = ?`, [req.params.id],
@@ -352,15 +368,10 @@ router.delete('/:id', (req, res) => {
                 try {
                     if (err) throw err;
 
-                    // check id is int
-                    if (isNaN(parseInt(req.params.id, 10))) {
-                        res.sendStatus(400).end;
-                    }
                     // if no rows affected, return 404 status
-                    else if (rows.affectedRows == 0) {
+                    if (rows.affectedRows == 0) {
                         res.sendStatus(404).end;
                     }
-
                     // return 200 status if deletion is successful
                     var json = [{ message: 'deleted' }];
                     res.status(200).end(JSON.stringify(json));
@@ -390,6 +401,11 @@ router.delete('/:id', (req, res) => {
  *         name: X-API-KEY
  *         schema:
  *          type: apiKey
+ *       - in : body
+ *         name : property
+ *         required: true
+ *         schema:
+ *             $ref: '#/definitions/postProperty'
  *     produces:
  *       - application/json
  *     responses:
@@ -401,30 +417,39 @@ router.delete('/:id', (req, res) => {
  *              $ref: '#/definitions/msg'
  *           example:
  *              message: updated
- *       404:
- *          description: Property not found
+ *       400:
+ *          description: id is not an int
  *          schema:
  *           type: string
  *           example:
- *             Not Found
+ *             Bad Request
  *       401:
  *          description: Authoriation Error, Missing api-key
  *          schema:
  *           type: string
  *           example:
  *             Unauthorized
+ *       404:
+ *          description: Property not found
+ *          schema:
+ *           type: string
+ *           example:
+ *             Not Found
  *
  */
 router.put('/:id', (req, res) => {
     // update id
-    try {
+
+    var key = req.headers['x-api-key'];
+    if (key != 'cs4783FTW') {
+        // check for auth
+        res.sendStatus(401).end;
+    } else if (isNaN(parseInt(req.params.id, 10))) {
+        // check id is an int
+        res.sendStatus(400).end;
+    } else {
         // message object
         var json = [];
-
-        // TODO:
-        if (isNaN(parseInt(req.params.id, 10))) {
-            res.sendStatus(400).end;
-        }
 
         // check for validation
         if (
@@ -461,13 +486,8 @@ router.put('/:id', (req, res) => {
             return res.end(JSON.stringify(json));
         }
 
-        // check for auth
-        var key = req.headers['x-api-key'];
-        if (key != 'cs4783FTW') {
-            res.sendStatus(401).end;
-        } else {
-            db.query(
-                `UPDATE properties SET 
+        db.query(
+            `UPDATE properties SET 
                 address = COALESCE(?, address),
                 city = COALESCE(?, city), 
                 state = COALESCE (?,state), 
@@ -476,31 +496,29 @@ router.put('/:id', (req, res) => {
             WHERE id = ? 
 
             `, [
-                    req.body.address,
-                    req.body.city,
-                    req.body.state,
-                    req.body.zip,
-                    req.params.id
-                ],
-                (err, rows, fields) => {
-                    try {
-                        // if there is an error, throw it
-                        if (err) throw err;
-                    } catch (e) {
-                        console.log(e);
-                        res.sendStatus(500);
-                    }
-                }
-            );
-            // request is good
-            json.push({ message: 'updated' });
-            return res.status(200).end(JSON.stringify(json));
-        }
-    } catch (e) {
-        console.log(e);
-        res.sendStatus(500);
-    }
-    res.send();
-});
+                req.body.address,
+                req.body.city,
+                req.body.state,
+                req.body.zip,
+                req.params.id
+            ],
+            (err, rows, fields) => {
+                try {
+                    // if there is an error, throw it
+                    if (err) throw err;
 
+                    if (rows.affectedRows == 0) {
+                        res.sendStatus(404).end;
+                    }
+                    // request is good
+                    json.push({ message: 'updated' });
+                    return res.status(200).end(JSON.stringify(json));
+                } catch (e) {
+                    console.log(e);
+                    res.sendStatus(500);
+                }
+            }
+        );
+    }
+});
 module.exports = router;
