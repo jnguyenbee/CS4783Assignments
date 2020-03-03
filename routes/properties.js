@@ -10,10 +10,21 @@ router.use(bodyParser.json());
 router.use(bodyParser.urlencoded({ extended: true }));
 
 /**
+ *
  * @swagger
+ * openapi: 3.0.0
  * tags:
  *   name: Property
  *   description: Property management
+ */
+
+/**
+ * components:
+ *  securitySchemes:
+ *    ApiKeyAuth:        # arbitrary name for the security scheme
+ *     type: apiKey
+ *     in: header       # can be "header", "query" or "cookie"
+ *     name: X-API-KEY  # name of the header, query parameter or cookie
  */
 
 /**
@@ -118,8 +129,13 @@ router.get('/', (req, res) => {
  *     parameters:
  *       - in : body
  *         name : property
+ *         required: true
  *         schema:
  *             $ref: '#/definitions/postProperty'
+ *       - in : header
+ *         name: X-API-KEY
+ *         schema:
+ *          type: apiKey
  *     produces:
  *       - application/json
  *     responses:
@@ -132,7 +148,7 @@ router.get('/', (req, res) => {
  *              example:
  *                  message: added
  *       400:
- *          description: Error
+ *          description: User Input Error
  *          schema:
  *              type: array
  *              items:
@@ -142,17 +158,18 @@ router.get('/', (req, res) => {
  *                  - message: state is not 2 characters
  *                  - message: city is not between 1 and 50 characters
  *                  - message: zip is not between 5 and 10 characters
+ *       401:
+ *          description: Authoriation Error, Missing api-key
+ *          schema:
+ *              type: string
+ *              example:
+ *                  Unauthorized
+ *
  */
 router.post('/', function(req, res) {
     try {
         // message object
         var json = [];
-
-        // check for auth
-        var key = req.headers['x-api-key'];
-        if (key != 'cs4783FTW') {
-            res.sendStatus(401).end;
-        }
 
         // check for validation
         if (!req.body.hasOwnProperty('address') ||
@@ -189,23 +206,29 @@ router.post('/', function(req, res) {
             return res.end(JSON.stringify(json));
         }
 
-        // run insert query if valid POST request
-        db.query(
-            `INSERT INTO properties (address, city, state, zip) VALUES (?, ?, ?, ?)`, [req.body.address, req.body.city, req.body.state, req.body.zip],
-            (err, rows, fields) => {
-                try {
-                    // if there is an error, throw it
-                    if (err) throw err;
-                } catch (e) {
-                    console.log(e);
-                    res.sendStatus(500);
+        // check for auth
+        var key = req.headers['x-api-key'];
+        if (key != 'cs4783FTW') {
+            res.sendStatus(401).end;
+        } else {
+            // run insert query if valid POST request
+            db.query(
+                `INSERT INTO properties (address, city, state, zip) VALUES (?, ?, ?, ?)`, [req.body.address, req.body.city, req.body.state, req.body.zip],
+                (err, rows, fields) => {
+                    try {
+                        // if there is an error, throw it
+                        if (err) throw err;
+                    } catch (e) {
+                        console.log(e);
+                        res.sendStatus(500);
+                    }
                 }
-            }
-        );
+            );
 
-        // request is good
-        json.push({ message: 'added' });
-        return res.status(200).end(JSON.stringify(json));
+            // request is good
+            json.push({ message: 'added' });
+            return res.status(200).end(JSON.stringify(json));
+        }
     } catch (e) {
         console.log(e);
         res.sendStatus(500);
@@ -273,6 +296,48 @@ router.get('/:id', (req, res) => {
 // @desc    properties route
 // @access  Public
 
+/**
+ * @swagger
+ * /properties/{propertyId}:
+ *   delete:
+ *     tags:
+ *       - Property
+ *     description: Delete a Property
+ *     parameters:
+ *       - in : path
+ *         name : propertyId
+ *         type: integer
+ *         required: true
+ *         description: Unique Property ID
+ *       - in : header
+ *         name: X-API-KEY
+ *         schema:
+ *          type: apiKey
+ *     produces:
+ *       - application/json
+ *     responses:
+ *       200:
+ *          description: Successfully Delete a Property
+ *          schema:
+ *           type: object
+ *           item:
+ *              $ref: '#/definitions/msg'
+ *           example:
+ *              message: deleted
+ *       404:
+ *          description: Property not found
+ *          schema:
+ *           type: string
+ *           example:
+ *             Not Found
+ *       401:
+ *          description: Authoriation Error, Missing api-key
+ *          schema:
+ *           type: string
+ *           example:
+ *             Unauthorized
+ *
+ */
 router.delete('/:id', (req, res) => {
     // delete id
 
@@ -308,17 +373,53 @@ router.delete('/:id', (req, res) => {
     }
 });
 
+/**
+ * @swagger
+ * /properties/{propertyId}:
+ *   put:
+ *     tags:
+ *       - Property
+ *     description: Update a Property
+ *     parameters:
+ *       - in : path
+ *         name : propertyId
+ *         type: integer
+ *         required: true
+ *         description: Unique Property ID
+ *       - in : header
+ *         name: X-API-KEY
+ *         schema:
+ *          type: apiKey
+ *     produces:
+ *       - application/json
+ *     responses:
+ *       200:
+ *          description: Successfully Update a Property
+ *          schema:
+ *           type: object
+ *           item:
+ *              $ref: '#/definitions/msg'
+ *           example:
+ *              message: updated
+ *       404:
+ *          description: Property not found
+ *          schema:
+ *           type: string
+ *           example:
+ *             Not Found
+ *       401:
+ *          description: Authoriation Error, Missing api-key
+ *          schema:
+ *           type: string
+ *           example:
+ *             Unauthorized
+ *
+ */
 router.put('/:id', (req, res) => {
     // update id
     try {
         // message object
         var json = [];
-
-        // check for auth
-        var key = req.headers['x-api-key'];
-        if (key != 'cs4783FTW') {
-            res.sendStatus(401).end;
-        }
 
         // TODO:
         if (isNaN(parseInt(req.params.id, 10))) {
@@ -360,9 +461,13 @@ router.put('/:id', (req, res) => {
             return res.end(JSON.stringify(json));
         }
 
-        // run update query if valid POST request
-        db.query(
-            `UPDATE properties SET 
+        // check for auth
+        var key = req.headers['x-api-key'];
+        if (key != 'cs4783FTW') {
+            res.sendStatus(401).end;
+        } else {
+            db.query(
+                `UPDATE properties SET 
                 address = COALESCE(?, address),
                 city = COALESCE(?, city), 
                 state = COALESCE (?,state), 
@@ -371,25 +476,26 @@ router.put('/:id', (req, res) => {
             WHERE id = ? 
 
             `, [
-                req.body.address,
-                req.body.city,
-                req.body.state,
-                req.body.zip,
-                req.params.id
-            ],
-            (err, rows, fields) => {
-                try {
-                    // if there is an error, throw it
-                    if (err) throw err;
-                } catch (e) {
-                    console.log(e);
-                    res.sendStatus(500);
+                    req.body.address,
+                    req.body.city,
+                    req.body.state,
+                    req.body.zip,
+                    req.params.id
+                ],
+                (err, rows, fields) => {
+                    try {
+                        // if there is an error, throw it
+                        if (err) throw err;
+                    } catch (e) {
+                        console.log(e);
+                        res.sendStatus(500);
+                    }
                 }
-            }
-        );
-        // request is good
-        json.push({ message: 'updated' });
-        return res.status(200).end(JSON.stringify(json));
+            );
+            // request is good
+            json.push({ message: 'updated' });
+            return res.status(200).end(JSON.stringify(json));
+        }
     } catch (e) {
         console.log(e);
         res.sendStatus(500);
