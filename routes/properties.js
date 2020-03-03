@@ -35,12 +35,16 @@ router.use(bodyParser.urlencoded({ extended: true }));
  *      properties:
  *        address:
  *         type: string
+ *         example: 123 Test Ave
  *        state:
  *         type: string
+ *         example: TX
  *        city:
  *         type: string
+ *         example: San Antonio
  *        zip:
  *         type: string
+ *         example: 78222
  *   getProperty:
  *      properties:
  *        id:
@@ -71,7 +75,10 @@ router.use(bodyParser.urlencoded({ extended: true }));
  *              type: array
  *              items:
  *                $ref: '#/definitions/getProperty'
- *              example:
+ */
+
+// Can add example if needed
+/*              example:
  *                  - id: 1
  *                    address: 123 Test Ave
  *                    zip: 78222
@@ -120,8 +127,7 @@ router.get('/', (req, res) => {
  *          description: Successfully Created a Property
  *          schema:
  *              type: object
- *              items:
- *                $ref: '#/definitions/msg'
+ *              $ref: '#/definitions/msg'
  *              example:
  *                 - message: added
  *       400:
@@ -260,6 +266,7 @@ router.get('/:id', (req, res) => {
 // @route   DELETE /properties/:id
 // @desc    properties route
 // @access  Public
+
 router.delete('/:id', (req, res) => {
     // delete id
     db.query(
@@ -282,6 +289,85 @@ router.delete('/:id', (req, res) => {
             }
         }
     );
+});
+
+router.put('/:id', (req, res) => {
+    // update id
+    try {
+        // message object
+        var json = [];
+
+        // check for validation
+        if (
+            req.body.hasOwnProperty('address') &&
+            (1 > req.body.address.length || 200 < req.body.address.length)
+        ) {
+            json.push({ message: 'address is not between 1 and 200 characters' });
+            res.status(400);
+        }
+
+        if (
+            req.body.hasOwnProperty('city') &&
+            (1 > req.body.city.length || 50 < req.body.city.length)
+        ) {
+            json.push({ message: 'city is not between 1 and 50 characters' });
+            res.status(400);
+        }
+
+        if (req.body.hasOwnProperty('state') && 2 != req.body.state.length) {
+            json.push({ message: 'state is not 2 characters' });
+            res.status(400);
+        }
+
+        if (
+            req.body.hasOwnProperty('zip') &&
+            (5 > req.body.zip.length || 10 < req.body.zip.length)
+        ) {
+            json.push({ message: 'zip is not between 5 and 10 characters' });
+            res.status(400);
+        }
+
+        // check status code
+        if (res.statusCode == 400) {
+            return res.end(JSON.stringify(json));
+        }
+
+        // run update query if valid POST request
+        db.query(
+            `UPDATE properties SET 
+                address = COALESCE(?, address),
+                city = COALESCE(?, city), 
+                state = COALESCE (?,state), 
+                zip = COALESCE(?,zip)
+
+            WHERE id = ? 
+
+            `, [
+                req.body.address,
+                req.body.city,
+                req.body.state,
+                req.body.zip,
+                req.params.id
+            ],
+            (err, rows, fields) => {
+                try {
+                    // if there is an error, throw it
+                    if (err) throw err;
+                } catch (e) {
+                    console.log(e);
+                    res.sendStatus(500);
+                }
+            }
+        );
+
+        // request is good
+        json.push({ message: 'updated' });
+        return res.status(200).end(JSON.stringify(json));
+    } catch (e) {
+        console.log(e);
+        res.sendStatus(500);
+    }
+    res.send();
 });
 
 module.exports = router;
