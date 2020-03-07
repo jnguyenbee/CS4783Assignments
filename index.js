@@ -1,9 +1,17 @@
 require('dotenv').config({ path: './.env' });
 const express = require('express');
+const https = require('https');
+const fs = require('fs')
 const app = express();
 const PORT = 12110;
-
 const swaggerDoc = require('./swaggerDoc.js');
+
+https.createServer({
+    key: fs.readFileSync('server.key'),
+    cert: fs.readFileSync('server.cert')
+  }, app).listen(3000, () => {
+    console.log('Listening...')
+  })
 
 // Define Routes
 app.use('/hello', require('./routes/hello'));
