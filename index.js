@@ -9,7 +9,7 @@ const swaggerDoc = require('./swaggerDoc.js');
 https.createServer({
     key: fs.readFileSync('server.key'),
     cert: fs.readFileSync('server.cert')
-  }, app).listen(3000, () => {
+  }, app).listen(PORT, () => {
     console.log('Listening...')
   })
 
