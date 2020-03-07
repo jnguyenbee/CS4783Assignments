@@ -34,3 +34,4 @@ Open up Postman and call the requests
 - POST   - localhost:3000/properties/
 - GET    - localhost:3000/properties/`<id>`
 - DELETE - localhost:3000/properties/`<id>`
+- PUT    - localhost:3000/properties/`<id>`
