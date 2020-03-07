@@ -2,7 +2,7 @@
 Install NodeJS and extract these files into a folder
 
 ## Required npm packages
-[express](https://www.npmjs.com/package/express), [dotenv](https://www.npmjs.com/package/dotenv), [mysql](https://www.npmjs.com/package/mysql), [nodemon](https://www.npmjs.com/package/nodemon), [body-parser](https://www.npmjs.com/package/body-parser)
+[express](https://www.npmjs.com/package/express), [dotenv](https://www.npmjs.com/package/dotenv), [mysql](https://www.npmjs.com/package/mysql), [nodemon](https://www.npmjs.com/package/nodemon), [body-parser](https://www.npmjs.com/package/body-parser), [swagger-jsdoc](https://www.npmjs.com/package/swagger-jsdoc), [swagger-ui-express](https://www.npmjs.com/package/swagger-ui-express)
 
 ## Installing packages
 Open up your terminal in the root directory and run this command:
