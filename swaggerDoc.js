@@ -6,7 +6,7 @@ const swaggerOptions = {
         info: {
             title: 'CS4783Assignment',
             version: '1.0.0',
-            description: 'Jason Kha, and Jennifer Nguyen'
+            description: 'Jennifer Nguyen and Jason Kha'
         },
         //host: 'https://localhost:3000',
         bathPath: '/'
