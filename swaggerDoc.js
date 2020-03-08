@@ -9,8 +9,8 @@ const swaggerOptions = {
             description: 'Jennifer Nguyen and Jason Kha'
         },
         //host: 'https://localhost:3000',
-        bathPath: '/'
-            //   schemes: [https, http]
+        bathPath: '/',
+        schemes: ['https', 'http']
             
     },
     apis: ['routes/*.js']
