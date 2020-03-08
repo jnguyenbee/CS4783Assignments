@@ -13,7 +13,8 @@ npm install
 ## Create environment variables
 Create a file called .env in the root directory and fill in the following variables without quotations
 ```
-PORT=
+HTTPPORT=
+HTTPSPORT=
 DATABASE_USERNAME=
 DATABASE_PASSWORD=
 DATABASE_HOST=

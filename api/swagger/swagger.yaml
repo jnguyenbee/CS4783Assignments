@@ -3,9 +3,10 @@ info:
   version: "1.0.0"
   title: CS4783Assignment
   description: Jennifer Nguyen and Jason Kha
-host: localhost:12111
 basePath: /
-schemes: ['http', 'https']
+schemes:
+  - http
+  - https
 tags:
   - name: Hello
     description: Hello

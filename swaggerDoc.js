@@ -8,10 +8,10 @@ const swaggerOptions = {
             version: '1.0.0',
             description: 'Jennifer Nguyen and Jason Kha'
         },
-        //host: 'https://localhost:3000',
+        host: 'localhost',
         bathPath: '/',
-        schemes: ['https', 'http']
-            
+        schemes: ['http://localhost:12110', 'https://localhost:12111']
+        
     },
     apis: ['routes/*.js']
 };
