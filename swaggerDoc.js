@@ -10,12 +10,13 @@ const swaggerOptions = {
         },
         //host: 'https://localhost:3000',
         bathPath: '/'
-            //   schemes: https
+            //   schemes: [https, http]
+            
     },
     apis: ['routes/*.js']
 };
 
 const swaggerDocs = swaggerJsDoc(swaggerOptions);
 module.exports = app => {
-    app.use('/', swaggerUi.serve, swaggerUi.setup(swaggerDocs));
+    app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocs));
 };
