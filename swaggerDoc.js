@@ -8,9 +8,9 @@ const swaggerOptions = {
             version: '1.0.0',
             description: 'Jennifer Nguyen and Jason Kha'
         },
-        host: 'localhost',
+        servers: 'cs47831.fulgentcorp.com',
         bathPath: '/',
-        schemes: ['http://localhost:12110', 'https://localhost:12111']
+        schemes: ['http', 'https']
         
     },
     apis: ['routes/*.js']
