@@ -228,7 +228,7 @@ router.post('/', function(req, res) {
 
             // request is good
             json.push({ message: 'added' });
-            return res.status(200).end(JSON.stringify(json));
+            return res.status(200).json(json);
         }
     } catch (e) {
         console.log(e);
@@ -374,7 +374,7 @@ router.delete('/:id', (req, res) => {
                     }
                     // return 200 status if deletion is successful
                     var json = [{ message: 'deleted' }];
-                    res.status(200).end(JSON.stringify(json));
+                    res.status(200).json(json);
                 } catch (e) {
                     console.log(e);
                     res.sendStatus(500);
@@ -512,7 +512,7 @@ router.put('/:id', (req, res) => {
                     }
                     // request is good
                     json.push({ message: 'updated' });
-                    return res.status(200).end(JSON.stringify(json));
+                    return res.status(200).json(json);
                 } catch (e) {
                     console.log(e);
                     res.sendStatus(500);

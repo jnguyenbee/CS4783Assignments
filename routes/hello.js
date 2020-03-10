@@ -15,7 +15,7 @@ const router = express.Router();
  *    type: object
  *    properties:
  *      message:
- *       type: string
+ *       type: object
  */
 
 // @route   GET /hello
@@ -43,8 +43,7 @@ const router = express.Router();
  *
  */
 router.get('/', function(req, res) {
-    var json = [{ message: 'hello yourself' }];
-    res.status(200).end(JSON.stringify(json));
+    return res.status(200).json({ message: 'hello yourself' });
 });
 
 module.exports = router;

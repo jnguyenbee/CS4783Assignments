@@ -2,10 +2,10 @@ swagger: "2.0"
 info:
   version: "1.0.0"
   title: CS4783Assignment
-  description: Jason Kha, and Jennifer Nguyen
-host: localhost:3000
+  description: Jennifer Nguyen and Jason Kha
 basePath: /
 schemes:
+  - http
   - https
 tags:
   - name: Hello
