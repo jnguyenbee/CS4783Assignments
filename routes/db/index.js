@@ -24,4 +24,9 @@ pool.connect((err) => {
     }
 });
 
+// loop to keep connection every 100 seconds
+setInterval(function () {
+    pool.query('SELECT 1', [], function () {})
+}, 100000)
+
 module.exports = pool
