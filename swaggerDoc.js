@@ -8,10 +8,9 @@ const swaggerOptions = {
             version: '1.0.0',
             description: 'Jennifer Nguyen and Jason Kha'
         },
-        servers: 'cs47831.fulgentcorp.com',
+        servers: 'https://cs47831.fulgentcorp.com',
         bathPath: '/',
-        schemes: ['http', 'https']
-        
+        schemes: ['https']
     },
     apis: ['routes/*.js']
 };

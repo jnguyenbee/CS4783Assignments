@@ -6,7 +6,6 @@ const fs = require('fs')
 const app = express();
 const swaggerDoc = require('./swaggerDoc.js');
 
-const HTTPPORT = process.env.HTTPPORT || 12110;
 const HTTPSPORT = process.env.HTTPSPORT || 12111;
 
 // keys for https
@@ -22,6 +21,5 @@ app.use('/properties', require('./routes/properties'));
 // Swagger
 swaggerDoc(app);
 
-// create http/https server
-http.createServer(app).listen(HTTPPORT);
+// create https server
 https.createServer(options, app).listen(HTTPSPORT);
